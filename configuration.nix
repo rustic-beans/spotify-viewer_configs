@@ -129,6 +129,8 @@ in
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
 
+  powerManagement.enable = false;
+
   systemd.services."display-manager".after = [
     "network-online.target"
     "systemd-resolved.service"
@@ -157,6 +159,12 @@ in
   # By defining the script source outside of the overlay, we don't have to
   # rebuild the package every time we change the startup script.
   environment.etc."openbox/autostart".source = writeScript "autostart" autostart;
+
+   environment.extraInit = ''
+    xset s off -dpms
+    xset s off     # Disable screensaver
+    xset s noblank # Don't blank video device
+   '';
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
